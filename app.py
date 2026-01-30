@@ -9,6 +9,7 @@ from email.mime.image import MIMEImage
 # --- [메일 설정 함수] ---
 def send_email(subject, body, image_list=None):
     sender_email = "gaeposangnok@gmail.com" 
+    # 주소와 주소 사이에 쉼표(,)를 넣어주세요.
     receiver_email = "gaeposangnok@gmail.com, peterkim0525@naver.com" 
     password = "mhczsijqwwagvaoi"
 
@@ -56,4 +57,5 @@ if st.button("위험성평가 보고서 제출"):
             st.success(f"성공! 사진 {len(uploaded_files)}장이 전송되었습니다.")
         except Exception as e:
             st.error(f"전송 실패: {e}")
+
 
