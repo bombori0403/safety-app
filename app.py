@@ -1,10 +1,27 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import smtplib
+from email.mime.text import MIMEText
 
 # 앱 제목 및 설정
 st.set_page_config(page_title="안전제일: 위험성평가 참여 앱", layout="centered")
+def send_email(subject, body):
+    # 보내는 사람 (본인메일)
+    sender_email = "gaeposangnok@gmail.com" 
+    # 받는 사람 (관리자님 메일)
+    receiver_email = "gaeposangnok@gmail.com" 
+    # 구글 앱 비밀번호 (일반 비번 아님!)
+    password = "mhczsijqwwagvaoi"
 
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, msg.as_string())
 st.title("🚧 현장 위험성평가 참여")
 st.write("현장의 위험 요인을 발견하면 즉시 등록해 주세요.")
 
@@ -49,7 +66,13 @@ else:
 # 4. 제출 버튼
 if st.button("위험성평가 보고서 제출"):
     if user_name and location and hazard_desc:
-        st.balloons()
-        st.success("성공적으로 접수되었습니다. 안전한 현장을 만들어주셔서 감사합니다!")
-    else:
-        st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+        # 메일 내용 만들기
+        email_body = f"신규 위험성평가 제보\n\n보고자: {user_name}\n장소: {location}\n내용: {hazard_desc}\n위험점수: {risk_score}"
+        
+        # 메일 보내기 실행
+        try:
+            send_email("⚠️ [위험성평가 제보 알림]", email_body)
+            st.success("메일로 보고서가 전송되었습니다!")
+            st.balloons()
+        except Exception as e:
+            st.error(f"메일 전송 실패: {e}")
