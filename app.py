@@ -12,6 +12,7 @@ def send_email(subject, body, image_data=None):
     receiver_email = "gaeposangnok@gmail.com" 
     password = "mhczsijqwwagvaoi"
 
+    # 메일 기본 설정 (Multipart 형식)
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = sender_email
@@ -56,6 +57,7 @@ if st.button("위험성평가 보고서 제출"):
             st.success(f"성공! 사진 {len(uploaded_files)}장이 전송되었습니다.")
         except Exception as e:
             st.error(f"전송 실패: {e}")
+
 
 
 
