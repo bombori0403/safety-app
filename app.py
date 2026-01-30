@@ -8,22 +8,22 @@ from email.mime.image import MIMEImage #
 
 # 앱 제목 및 설정
 st.set_page_config(page_title="안전제일: 위험성평가 참여 앱", layout="centered")
-def send_email(subject, body, image_data=None):
+def send_email(subject, body, image_list=None):
     sender_email = "gaeposangnok@gmail.com" 
     receiver_email = "gaeposangnok@gmail.com" 
     password = "mhczsijqwwagvaoi"
 
-    # 메일 기본 설정 (Multipart 형식)
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = sender_email
     msg['To'] = receiver_email
     msg.attach(MIMEText(body))
 
-    # 사진이 있다면 첨부하기
-    if image_data:
-        img = MIMEImage(image_data, name="safety_photo.jpg")
-        msg.attach(img)
+    # 사진이 여러 장일 경우 하나씩 메일에 붙임
+    if image_list:
+        for i, img_data in enumerate(image_list):
+            img = MIMEImage(img_data, name=f"safety_photo_{i+1}.jpg")
+            msg.attach(img)
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender_email, password)
@@ -37,7 +37,7 @@ with st.expander("👤 보고자 정보", expanded=True):
     with col1:
         user_name = st.text_input("성명")
     with col2:
-        department = st.selectbox("부서", ["제조팀", "물류팀", "공무팀", "안전환경팀"])
+        department = st.selectbox("부서", ["관리팀", "시설팀", "미화팀", "경비팀"])
 
 # 2. 위험 요인 등록
 st.divider()
@@ -46,8 +46,8 @@ st.subheader("📍 위험 요인 상세")
 location = st.text_input("위험 장소 (예: A라인 세척기 근처)")
 hazard_desc = st.text_area("위험 요인 설명", placeholder="어떤 상황이 위험한가요?")
 
-# 사진 첨부
-uploaded_file = st.file_uploader("현장 사진 업로드", type=["jpg", "png", "jpeg"])
+# 사진을 여러 장 선택할 수 있게 'accept_multiple_files=True'를 추가합니다.
+uploaded_files = st.file_uploader("현장 사진 업로드 (여러 장 가능)", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 
 # 3. 위험성 계산 (L x S)
 st.divider()
@@ -86,3 +86,4 @@ if st.button("위험성평가 보고서 제출"):
             st.success("사진과 함께 메일 전송 완료!")
         except Exception as e:
             st.error(f"오류 발생: {e}")
+
