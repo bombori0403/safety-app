@@ -3,21 +3,27 @@ import pandas as pd
 from datetime import datetime
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart #
+from email.mime.image import MIMEImage #
 
 # 앱 제목 및 설정
 st.set_page_config(page_title="안전제일: 위험성평가 참여 앱", layout="centered")
-def send_email(subject, body):
-    # 보내는 사람 (본인메일)
+def send_email(subject, body, image_data=None):
     sender_email = "gaeposangnok@gmail.com" 
-    # 받는 사람 (관리자님 메일)
     receiver_email = "gaeposangnok@gmail.com" 
-    # 구글 앱 비밀번호 (일반 비번 아님!)
     password = "mhczsijqwwagvaoi"
 
-    msg = MIMEText(body)
+    # 메일 기본 설정 (Multipart 형식)
+    msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = sender_email
     msg['To'] = receiver_email
+    msg.attach(MIMEText(body))
+
+    # 사진이 있다면 첨부하기
+    if image_data:
+        img = MIMEImage(image_data, name="safety_photo.jpg")
+        msg.attach(img)
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender_email, password)
@@ -66,13 +72,17 @@ else:
 # 4. 제출 버튼
 if st.button("위험성평가 보고서 제출"):
     if user_name and location and hazard_desc:
-        # 메일 내용 만들기
-        email_body = f"신규 위험성평가 제보\n\n보고자: {user_name}\n장소: {location}\n내용: {hazard_desc}\n위험점수: {risk_score}"
+        email_body = f"📢 제보 내용\n\n보고자: {user_name}\n장소: {location}\n내용: {hazard_desc}"
         
-        # 메일 보내기 실행
+        # 사진 파일 읽기
+        img_bytes = None
+        if uploaded_file is not None:
+            img_bytes = uploaded_file.getvalue() # 사진 데이터를 가져옴
+        
         try:
-            send_email("⚠️ [위험성평가 제보 알림]", email_body)
-            st.success("메일로 보고서가 전송되었습니다!")
+            # 함수 실행 시 img_bytes도 같이 보냄
+            send_email(f"⚠️ [위험제보] {location}", email_body, img_bytes)
             st.balloons()
+            st.success("사진과 함께 메일 전송 완료!")
         except Exception as e:
-            st.error(f"메일 전송 실패: {e}")
+            st.error(f"오류 발생: {e}")
