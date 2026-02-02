@@ -8,9 +8,9 @@ from email.mime.image import MIMEImage
 
 # --- [메일 설정: 본인 정보로 수정] ---
 def send_email(subject, body, image_data=None):
-    sender_email = "본인의_구글_메일@gmail.com" 
-    receiver_email = "받을_메일_주소@naver.com" 
-    password = "발급받은16자리비밀번호"
+    sender_email = "gaeposangnok@gmail.com" 
+    receiver_email = "gaeposangnok@gmail.com" 
+    password = "mhczsijqwwagvaoi"
 
     msg = MIMEMultipart()
     msg['Subject'] = subject
@@ -82,5 +82,6 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
 
 
