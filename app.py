@@ -8,14 +8,20 @@ from email.mime.image import MIMEImage
 
 # --- [1. 메일 설정: 본인 정보로 꼭 수정!] ---
 def send_email(subject, body, image_list=None):
+    # 1. 내 구글 메일
     sender_email = "gaeposangnok@gmail.com" 
-    receiver_email = "ks525@kakao.com.com, get004@naver.com" # 여러 명 쉼표로 구분
+    # 2. 받는 사람들을 쉼표로 구분해서 넣으세요.
+    receiver_string = "get004@naver.com, gaeposangnok@gmail.com" 
+    # 3. 구글 앱 비밀번호
     password = "mhczsijqwwagvaoi"
+
+    # 주소 문자열을 리스트로 변환 (공백 제거)
+    receivers = [r.strip() for r in receiver_string.split(",")]
 
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = sender_email
-    msg['To'] = receiver_email
+    msg['To'] = receiver_string # 메일 화면에 표시될 주소창
     msg.attach(MIMEText(body))
 
     if image_list:
@@ -25,7 +31,8 @@ def send_email(subject, body, image_list=None):
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
+        # 중요: 실제 전송 시에는 리스트 형태인 'receivers'를 넣어야 합니다.
+        server.sendmail(sender_email, receivers, msg.as_string())
 
 # --- [2. 앱 화면 구성] ---
 st.set_page_config(page_title="안전제일: 위험성평가 참여 앱", page_icon="⛑️", layout="centered")
@@ -100,6 +107,7 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
 
 
 
