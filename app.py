@@ -40,7 +40,7 @@ with st.expander("👤 보고자 정보", expanded=True):
         user_name = st.text_input("성명")
     with col2:
         # 부서 목록 수정 반영
-        department = st.selectbox("부서", ["관리팀", "시설팀", "미화팀", "경비팀"])
+        department = st.selectbox("부서", ["시설팀", "관리팀", "미화팀", "경비팀"])
 
 # 위험 상세 정보
 st.divider()
@@ -58,7 +58,7 @@ col3, col4 = st.columns(2)
 with col3:
     frequency = st.slider("발생 빈도(L)", 1, 5, 3) # 1~5점 사이 선택
 with col4:
-    severity = st.slider("사고 강도(S)", 1, 5, 3)  # 1~4점 사이 선택
+    severity = st.slider("사고 강도(S)", 1, 5, 3)  # 1~5점 사이 선택
 
 risk_score = frequency * severity # 점수 계산
 
@@ -100,4 +100,5 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
 
