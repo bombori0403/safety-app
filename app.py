@@ -45,9 +45,8 @@ st.subheader("📍 위험 요인 상세")
 location = st.text_input("위험 장소 (예: A라인 세척기 근처)")
 hazard_desc = st.text_area("위험 요인 설명", placeholder="어떤 상황이 위험한가요?")
 
-# 사진 업로드 칸
-uploaded_file = st.file_uploader("현장 사진 업로드", type=["jpg", "png", "jpeg"])
-
+# 사진을 여러 장 선택할 수 있게 'accept_multiple_files=True'를 추가합니다.
+uploaded_files = st.file_uploader("현장 사진 업로드 (여러 장 가능)", type=["jpg", "png", "jpeg"], accept_multiple_files=True)
 st.divider()
 st.subheader("📊 위험도 자가 평가")
 col3, col4 = st.columns(2)
@@ -83,4 +82,5 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
 
