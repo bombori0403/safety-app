@@ -11,7 +11,7 @@ def send_email(subject, body, image_list=None):
     # 1. 내 구글 메일
     sender_email = "gaeposangnok@gmail.com" 
     # 2. 받는 사람들을 쉼표로 구분해서 넣으세요.
-    receiver_string = "get004@naver.com, gaeposangnok@gmail.com" 
+    receiver_string = "moonsang7856@gmail.com, gaeposangnok@gmail.com" 
     # 3. 구글 앱 비밀번호
     password = "mhczsijqwwagvaoi"
 
@@ -107,6 +107,7 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
 
 
 
