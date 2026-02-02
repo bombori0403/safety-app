@@ -38,7 +38,7 @@ with st.expander("👤 보고자 정보", expanded=True):
     with col1:
         user_name = st.text_input("성명")
     with col2:
-        department = st.selectbox("부서", ["제조팀", "물류팀", "공무팀", "안전환경팀"])
+        department = st.selectbox("부서", ["시설팀", "관리팀", "경비팀", "미화팀"])
 
 st.divider()
 st.subheader("📍 위험 요인 상세")
@@ -83,3 +83,4 @@ if st.button("위험성평가 보고서 제출"):
             st.error(f"전송 중 오류가 발생했습니다: {e}")
     else:
         st.error("성명, 장소, 내용은 필수 입력 사항입니다.")
+
